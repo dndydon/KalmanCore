@@ -110,7 +110,7 @@ Lorenz96Demo.runAll()
 
 ## License
 
-[Add your license here]
+[./LICENSE.txt]
 
 ## Contributing
 
