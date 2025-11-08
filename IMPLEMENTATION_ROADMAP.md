@@ -44,35 +44,38 @@ This roadmap describes the path to completing KalmanCore v1.0, implementing all 
 ### Phase 1: Section 3 - Sequential Parameter Estimation
 **Estimated effort: 2-3 weeks**
 
-#### 3.1 Ensemble Kalman Filter (EnKF) Enhancement
-- Implement sequential parameter estimation framework
-- State-parameter augmentation approach
-- Covariance inflation methods
-- Localization techniques
+Current status (in progress)
+- Augmented-state EnKF scaffold implemented:
+  - Forecast step with parameter evolution: `.constant`, `.randomWalk(Qθ)`, `.ar1(ρ,Qθ)`
+  - Analysis step (perturbed/deterministic) with augmented gain K using ensemble anomalies
+  - Optional multiplicative inflation on state
+  - File: `Sources/KalmanCore/filters/EnsembleKalmanFilter.swift`
+- Combined algorithms (scaffolds):
+  - EnKF–EM: windowed run with placeholder E/M steps
+    - File: `Sources/KalmanCore/estimation/EnKFEM.swift`
+  - EnKF–NR: windowed likelihood evaluator scaffold
+    - File: `Sources/KalmanCore/estimation/EnKFNewtonRaphson.swift`
+- Tests added:
+  - `Tests/KalmanCoreTests/EnKFParameterAugmentationTests.swift` (analysis updates θ)
+  - `Tests/KalmanCoreTests/EnKFEMBasicTests.swift` (runWindow basics)
 
-**Files to create:**
-- `filters/EnsembleKalmanFilterSequential.swift` (~400 lines)
-- `SECTION_3_1.md` documentation
-- Tests for sequential EnKF
+Next actions
+- EnKF (augmented):
+  - [ ] Add additive inflation support and optional simple localization
+  - [ ] Add deterministic square-root variant (optional)
+- EnKF–EM:
+  - [ ] Compute E-step statistics from EnKF window (filtered/smoothed proxies)
+  - [ ] Reuse existing EM M-step for additive σ = θ₀ I to update θ
+  - [ ] Add parameter-recovery tests (L96, partial obs)
+- EnKF–NR:
+  - [ ] Implement windowed innovation-based log-likelihood
+  - [ ] Finite-difference gradients/Hessian with cached randomness
+  - [ ] Newton loop with line search and bounds
 
-#### 3.2 Combined EnKF-EM Algorithm
-- Coupling of EnKF with EM iterations
-- Dual estimation (state + parameters)
-- Sequential likelihood computation
-
-**Files to create:**
-- `algorithms/CombinedEnKFEM.swift` (~350 lines)
-- `SECTION_3_2.md` documentation
-- Tests and examples
-
-#### 3.3 Combined EnKF-NR Algorithm
-- Coupling of EnKF with Newton-Raphson iterations
-- Fast convergence property exploitation
-
-**Files to create:**
-- `algorithms/CombinedEnKFNR.swift` (~300 lines)
-- `SECTION_3_3.md` documentation
-- Tests and examples
+Documentation
+- [ ] `SECTION_3_1.md` (EnKF with parameter augmentation)
+- [ ] `SECTION_3_2.md` (EnKF–EM)
+- [ ] `SECTION_3_3.md` (EnKF–NR)
 
 ### Phase 2: Additional Filters (High Priority)
 **Estimated effort: 2-3 weeks**
@@ -82,30 +85,30 @@ This roadmap describes the path to completing KalmanCore v1.0, implementing all 
 - Basis for other filters
 - Used in validation
 
-**Files to create:**
-- `filters/KalmanFilterLinear.swift` (~200 lines)
-- Documentation
-- Tests
+Status / files
+- Implementation target: `Sources/KalmanCore/filters/KalmanFilter.swift` (exists as placeholder; fill in)
+- [ ] Documentation
+- [ ] Tests
 
 #### Extended Kalman Filter (EKF)
 - Nonlinear system support
 - Jacobian computation
 - Used in comparisons
 
-**Files to create:**
-- `filters/ExtendedKalmanFilter.swift` (~250 lines)
-- Documentation
-- Tests
+Status / files
+- Implementation target: `Sources/KalmanCore/filters/ExtendedKalmanFilter.swift` (exists as placeholder; fill in)
+- [ ] Documentation
+- [ ] Tests
 
 #### Unscented Kalman Filter (UKF)
 - Sigma point approach
 - Better nonlinear handling than EKF
 - Performance comparison
 
-**Files to create:**
-- `filters/UnscentedKalmanFilter.swift` (~300 lines)
-- Documentation
-- Tests
+Status / files
+- Implementation target: `Sources/KalmanCore/filters/UnscentedKalmanFilter.swift` (exists as placeholder; fill in)
+- [ ] Documentation
+- [ ] Tests
 
 ### Phase 3: Advanced Features (Medium Priority)
 **Estimated effort: 1-2 weeks**
@@ -182,7 +185,7 @@ This roadmap describes the path to completing KalmanCore v1.0, implementing all 
 1. ✅ Section 2.1 - Stochastic framework (DONE)
 2. ✅ Section 2.2 - EM algorithm (DONE)
 3. ✅ Section 2.3 - NR-MLE algorithm (DONE)
-4. Section 3.1-3.3 - Sequential parameter estimation
+4. Section 3.1-3.3 - Sequential parameter estimation (in progress)
 5. Basic filters (KF, EKF)
 6. Comprehensive examples
 7. Production readiness
@@ -243,7 +246,7 @@ Each major section should include:
 | Phase | Work Items | Effort | Target Date |
 |-------|-----------|--------|-------------|
 | ✅ 0 | Sections 2.1-2.3 | Done | Completed |
-| 1 | Sequential Est. (3.1-3.3) | 2-3 weeks | Week 3 |
+|| 1 | Sequential Est. (3.1-3.3) | 2-3 weeks | In progress |
 | 2 | Filters (KF, EKF, UKF) | 2-3 weeks | Week 6 |
 | 3 | Advanced (PF, Multi-model) | 1-2 weeks | Week 8 |
 | 4 | Examples & Demos | 2-3 weeks | Week 11 |
@@ -292,8 +295,8 @@ Each major section should include:
 ### Milestone 1: Core Math (✅ ACHIEVED)
 Sections 2.1-2.3 fully implemented with comprehensive tests
 
-### Milestone 2: Sequential Estimation (Target: Week 3)
-Section 3.1-3.3 complete with working examples
+### Milestone 2: Sequential Estimation (In Progress)
+Section 3.1-3.3: EnKF augmented-state and basic tests in place; next: connect EnKF–EM M-step and implement EnKF–NR likelihood
 
 ### Milestone 3: Filter Suite (Target: Week 6)
 KF, EKF, UKF all functional and tested

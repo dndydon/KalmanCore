@@ -135,18 +135,72 @@ public struct Matrix {
   }
 }
 
-// MARK: - CustomStringConvertible
 
+// MARK: - CustomStringConvertible for debug output
 extension Matrix: CustomStringConvertible {
   public var description: String {
+    // Helper to format numbers consistently.
+    func format(_ x: Double) -> String {
+      // Choose a compact but readable default. Adjust as needed.
+      return String(format: "%.6g", x)
+      //return String(format: "%.6f", x)
+      // Alternatives:
+      // return String(format: "%.1f", x)
+      // return String(format: "% .6e", x)
+    }
+
+    // Handle empty shapes gracefully
+    guard rows > 0 && cols > 0 else { return "\n  ⎡ ⎤\n" }
+
+    // Compute per-column widths based on formatted content
+    var colWidths = [Int](repeating: 0, count: cols)
+    for j in 0..<cols {
+      var w = 0
+      for i in 0..<rows {
+        let s = format(self[i, j])
+        if s.count > w { w = s.count }
+      }
+      colWidths[j] = w
+    }
+
+    // Build each row string with right-aligned cols
+    var lines: [String] = []
+    lines.reserveCapacity(rows)
+    for i in 0..<rows {
+      var parts: [String] = []
+      parts.reserveCapacity(cols)
+      for j in 0..<cols {
+        let s = format(self[i, j])
+        let pad = max(0, colWidths[j] - s.count)
+        let cell = String(repeating: " ", count: pad) + s
+        parts.append(cell)
+      }
+      // Two spaces between cols for readability
+      let rowBody = parts.joined(separator: "  ")
+      lines.append(rowBody)
+    }
+
+    // Determine the inner width to align brackets consistently
+    let innerWidth = lines.map { $0.count }.max() ?? 0
+
+    func wrap(_ i: Int, _ body: String) -> String {
+      let padded = body + String(repeating: " ", count: max(0, innerWidth - body.count))
+      switch (i, rows) {
+        case (0, 1):
+          // Single-row matrix
+          return "  ( \(padded) )"
+        case (0, _):
+          return "  ⎛ \(padded) ⎞"
+        case (rows - 1, _):
+          return "  ⎝ \(padded) ⎠"
+        default:
+          return "  ⎜ \(padded) ⎥"
+      }
+    }
+    
     var result = "Matrix(\(rows)×\(cols)):\n"
     for i in 0..<rows {
-      result += "["
-      for j in 0..<cols {
-        result += String(format: "%8.3f", self[i, j])
-        if j < cols - 1 { result += ", " }
-      }
-      result += "]\n"
+      result += wrap(i, lines[i]) + "\n"
     }
     return result
   }
