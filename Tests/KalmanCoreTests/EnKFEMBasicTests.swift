@@ -30,7 +30,7 @@ struct EnKFEMBasicTests {
     let Ptheta0 = Matrix.diagonal([0.05])
 
     // Build initial augmented ensemble
-    var Z = enkf.initializeEnsemble(x0: x0, P0: P0, theta0: theta0, Ptheta0: Ptheta0)
+    let Z = enkf.initializeEnsemble(x0: x0, P0: P0, theta0: theta0, Ptheta0: Ptheta0)
 
     // Generate a short sequence of synthetic observations from truth
     let trueTheta: [Double] = [0.3]

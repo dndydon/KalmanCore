@@ -41,7 +41,7 @@ struct EnKFEMParameterRecoveryTests {
     let P0 = Matrix.identity(size: n) * 0.2
     let theta0: [Double] = [0.15]
     let Ptheta0 = Matrix.diagonal([0.05])
-    var Z0 = enkf.initializeEnsemble(x0: x0, P0: P0, theta0: theta0, Ptheta0: Ptheta0)
+    let Z0 = enkf.initializeEnsemble(x0: x0, P0: P0, theta0: theta0, Ptheta0: Ptheta0)
 
     // EnKF-EM run over a window shorter than the data
     var emConfig = EnKFEMConfig()
