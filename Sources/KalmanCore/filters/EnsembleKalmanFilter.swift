@@ -1,18 +1,37 @@
 import Foundation
 
+/*
+ Augmented-state Ensemble Kalman Filter (EnKF)
+ --------------------------------------------
+ Implements an augmented-state EnKF that jointly updates the system state x and
+ parameters θ by operating on concatenated ensemble members [x; θ].
+
+ Features implemented
+ - Forecast: state via model.transition, parameters via constant/random-walk/AR(1)
+ - Analysis: standard EnKF update using ensemble anomalies, with options for
+   perturbed or deterministic observations (the latter via usePerturbedObservations=false)
+ - Inflation: multiplicative (state-only), additive (state-only)
+ - Simple localization: optional global scalar taper applied to state rows of P_zy
+
+ References
+ - Evensen, G. (1994). Ensemble Kalman filter.
+ - Pulido et al. (2018), Section 3 (parameter augmentation for identification)
+*/
+
 /// Configuration for the augmented-state Ensemble Kalman Filter (EnKF)
 public struct EnKFConfig {
   /// Number of ensemble members
   public var ensembleSize: Int
-  /// Multiplicative inflation factor (>= 1.0). Applied in analysis step (TODO)
+  /// Multiplicative inflation factor (>= 1.0). Applied to STATE anomalies during analysis.
   public var inflation: Double
-  /// Additive inflation (noise covariance) for state (optional, TODO in analysis)
+  /// Additive inflation (noise covariance) added to STATE during analysis (optional).
   public var additiveInflation: Matrix?
   /// Parameter evolution model
   public var parameterEvolution: ParameterEvolution
   /// Use perturbed observations (stochastic EnKF) if true; otherwise deterministic variant (future)
   public var usePerturbedObservations: Bool
-  /// Optional localization radius (placeholder – not used in scaffold)
+  /// Optional simple localization control. If set, a global scalar taper in [0,1] is applied
+  /// to STATE rows of the cross-covariance used in the gain (parameters are not localized).
   public var localizationRadius: Double?
   /// Verbose logging
   public var verbose: Bool
@@ -169,6 +188,17 @@ public final class EnsembleKalmanFilter<Model: StochasticDynamicalSystem> {
       }
     }
 
+    // Optionally apply additive inflation (STATE only): x_i <- x_i + ξ_i,  ξ_i ~ N(0, Q_add)
+    if let Qadd = config.additiveInflation {
+      precondition(Qadd.rows == n && Qadd.cols == n, "additiveInflation must be n×n for state")
+      for k in 0..<N {
+        let noise = RandomUtils.generateGaussianNoiseWithCovariance(dimension: n, covariance: Qadd)
+        for i in 0..<n {
+          inflatedMembers[k][i] += noise[i]
+        }
+      }
+    }
+
     // Predicted observations per member
     var yPred = Array(repeating: [Double](repeating: 0.0, count: m), count: N)
     for (idx, member) in inflatedMembers.enumerated() {
@@ -209,7 +239,21 @@ public final class EnsembleKalmanFilter<Model: StochasticDynamicalSystem> {
     // Covariances
     let scale = 1.0 / Double(N - 1)
     let S = scale * (A_y * A_y.transposed) + R              // m×m
-    let P_zy = scale * (A_z * A_y.transposed)               // (n+p)×m
+    var P_zy = scale * (A_z * A_y.transposed)               // (n+p)×m
+
+    // Optional simple localization (STATE rows only) via global scalar taper in [0,1]
+    if let loc = config.localizationRadius {
+      // Interpret `loc` as a global taper factor; clamp to [0,1]
+      let taper = max(0.0, min(1.0, loc))
+      if taper < 1.0 {
+        for row in 0..<n { // state rows
+          for col in 0..<m {
+            P_zy[row, col] *= taper
+          }
+        }
+        // parameter rows [n ..< n+p] remain unmodified
+      }
+    }
 
     // Kalman gain
     let S_inv = matrixInverse(S)

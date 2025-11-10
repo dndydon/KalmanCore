@@ -64,9 +64,9 @@ Next actions
   - [ ] Add additive inflation support and optional simple localization
   - [ ] Add deterministic square-root variant (optional)
 - EnKF–EM:
-  - [ ] Compute E-step statistics from EnKF window (filtered/smoothed proxies)
-  - [ ] Reuse existing EM M-step for additive σ = θ₀ I to update θ
-  - [ ] Add parameter-recovery tests (L96, partial obs)
+  - [x] Compute E-step statistics from EnKF window (filtered proxies: mean and cov trace)
+  - [x] Reuse existing EM M-step for additive σ = θ₀ I to update θ (tight loop with re-assimilation)
+  - [x] Add parameter-recovery tests (L96, identity obs)
 - EnKF–NR:
   - [ ] Implement windowed innovation-based log-likelihood
   - [ ] Finite-difference gradients/Hessian with cached randomness
@@ -74,7 +74,7 @@ Next actions
 
 Documentation
 - [ ] `SECTION_3_1.md` (EnKF with parameter augmentation)
-- [ ] `SECTION_3_2.md` (EnKF–EM)
+- [x] `SECTION_3_2.md` (EnKF–EM)
 - [ ] `SECTION_3_3.md` (EnKF–NR)
 
 ### Phase 2: Additional Filters (High Priority)

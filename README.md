@@ -2,6 +2,11 @@
 
 A Swift package implementing various Kalman filtering algorithms and estimation techniques.
 
+For Basic Understanding: [Kalman Filter For Dummies](https://bilgin.esme.org/BitsAndBytes/KalmanFilterforDummies)
+
+![KalmanFilter summary]
+(https://bilgin.esme.org/Content/Images/BitsAndBytes/KalmanFilterForDummies/iteration_steps.gif)
+
 ## Features
 
 ### Core Components
@@ -33,6 +38,7 @@ Implementation of stochastic dynamical systems from Pulido et al. (2018):
 ### Estimation (In Development)
 - Expectation-Maximization (EM)
 - Newton-Raphson Maximum Likelihood Estimation (MLE)
+- EnKF–EM (windowed, additive-noise case) — see SECTION_3_2.md
 
 ### Examples
 - Lorenz96 system demonstrations
@@ -58,6 +64,9 @@ Or add it in Xcode via File → Add Package Dependencies.
 - macOS 13.0+ / iOS 16.0+ / tvOS 16.0+ / watchOS 9.0+
 
 ## Usage
+
+### Section 3: Sequential Parameter Estimation (EnKF–EM)
+See SECTION_3_2.md for the algorithm outline and a minimal usage example combining the augmented-state EnKF with an EM M-step in the additive-noise case.
 
 ### Section 2.1: Stochastic Parameterization
 

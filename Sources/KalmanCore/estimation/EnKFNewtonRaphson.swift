@@ -41,8 +41,8 @@ public final class EnKFNewtonRaphson<Model: StochasticDynamicalSystem> {
   ) -> EnKFNRResult {
     precondition(!observations.isEmpty, "Need at least one observation")
 
-    var params = initialParameters
-    var Z = initialEnsemble
+    let params = initialParameters
+    let Z = initialEnsemble
     var llHistory: [Double] = []
 
     // Scaffold: evaluate a placeholder window likelihood and return unchanged parameters
