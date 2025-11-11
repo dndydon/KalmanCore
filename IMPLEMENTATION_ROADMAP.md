@@ -1,12 +1,12 @@
-# KalmanCore Implementation Roadmap
+# KalmanCore Swift Framework Implementation Roadmap
 
 ## Overview
 
 This roadmap describes the path to completing KalmanCore v1.0, implementing all sections of:
 
-> Pulido, M., Tandeo, P., Bocquet, M., Carrassi, A., & Lucini, M. (2018).  
-> Stochastic parameterization identification using ensemble Kalman filtering combined with maximum likelihood methods.  
-> *Tellus A: Dynamic Meteorology and Oceanography*, 70:1, 1-17.
+- Pulido, M., Tandeo, P., Bocquet, M., Carrassi, A., & Lucini, M. (2018).  
+- Stochastic parameterization identification using ensemble Kalman filtering combined with maximum likelihood methods.  
+- *Tellus A: Dynamic Meteorology and Oceanography*, 70:1, 1-17.
 
 ## Completed (✅)
 
@@ -45,23 +45,25 @@ This roadmap describes the path to completing KalmanCore v1.0, implementing all 
 **Estimated effort: 2-3 weeks**
 
 Current status (in progress)
-- Augmented-state EnKF scaffold implemented:
+- Augmented-state EnKF implemented (initial version):
   - Forecast step with parameter evolution: `.constant`, `.randomWalk(Qθ)`, `.ar1(ρ,Qθ)`
   - Analysis step (perturbed/deterministic) with augmented gain K using ensemble anomalies
-  - Optional multiplicative inflation on state
+  - Inflation: multiplicative (state-only), additive (state-only)
+  - Simple localization: global scalar taper on state rows of P_zy
   - File: `Sources/KalmanCore/filters/EnsembleKalmanFilter.swift`
-- Combined algorithms (scaffolds):
-  - EnKF–EM: windowed run with placeholder E/M steps
+- Combined algorithms:
+  - EnKF–EM: windowed run with tight-loop additive M-step (re-assimilates each EM iter)
     - File: `Sources/KalmanCore/estimation/EnKFEM.swift`
   - EnKF–NR: windowed likelihood evaluator scaffold
     - File: `Sources/KalmanCore/estimation/EnKFNewtonRaphson.swift`
 - Tests added:
   - `Tests/KalmanCoreTests/EnKFParameterAugmentationTests.swift` (analysis updates θ)
   - `Tests/KalmanCoreTests/EnKFEMBasicTests.swift` (runWindow basics)
+  - `Tests/KalmanCoreTests/EnKFEMParameterRecoveryTests.swift` (parameter moves toward truth)
 
 Next actions
 - EnKF (augmented):
-  - [ ] Add additive inflation support and optional simple localization
+  - [x] Add additive inflation support and optional simple localization
   - [ ] Add deterministic square-root variant (optional)
 - EnKF–EM:
   - [x] Compute E-step statistics from EnKF window (filtered proxies: mean and cov trace)
@@ -73,9 +75,9 @@ Next actions
   - [ ] Newton loop with line search and bounds
 
 Documentation
-- [ ] `SECTION_3_1.md` (EnKF with parameter augmentation)
+- [x] `SECTION_3_1.md` (EnKF with parameter augmentation)
 - [x] `SECTION_3_2.md` (EnKF–EM)
-- [ ] `SECTION_3_3.md` (EnKF–NR)
+- [x] `SECTION_3_3.md` (EnKF–NR, stub)
 
 ### Phase 2: Additional Filters (High Priority)
 **Estimated effort: 2-3 weeks**
@@ -111,6 +113,15 @@ Status / files
 - Implementation target: `Sources/KalmanCore/filters/UnscentedKalmanFilter.swift` (exists as placeholder; fill in)
 - [ ] Documentation
 - [ ] Tests
+
+Next up (UKF)
+- [ ] Sigma point generation (scaled UT): configure α, β, κ; ensure reproducible ordering
+- [ ] Time update: propagate sigma points through model.transition; compute mean/cov (with process noise)
+- [ ] Measurement update: propagate sigma points through observation; compute innovation stats and cross-covariance; gain
+- [ ] Numerical stability: use Cholesky (SPD) for square roots; add small jitter to keep covariances SPD
+- [ ] Optional: Square-root UKF variant for better stability/performance
+- [ ] Tests: shapes and SPD checks, partial observation case, linear-consistency vs KF, LL finiteness, basic recovery on Lorenz96 small dt
+- [ ] Docs: brief SECTION_3_x note and README snippet
 
 ### Phase 3: Advanced Features (Medium Priority)
 **Estimated effort: 1-2 weeks**
@@ -248,7 +259,7 @@ Each major section should include:
 | Phase | Work Items | Effort | Target Date |
 |-------|-----------|--------|-------------|
 | ✅ 0 | Sections 2.1-2.3 | Done | Completed |
-|| 1 | Sequential Est. (3.1-3.3) | 2-3 weeks | In progress |
+| 1 | Sequential Est. (3.1-3.3) | 2-3 weeks | In progress |
 | 2 | Filters (KF, EKF, UKF) | 2-3 weeks | Week 6 |
 | 3 | Advanced (PF, Multi-model) | 1-2 weeks | Week 8 |
 | 4 | Examples & Demos | 2-3 weeks | Week 11 |
@@ -273,7 +284,7 @@ Each major section should include:
 
 ---
 
-## Post-v1.0 Enhancements
+## Post-v1.0 Enhancements (estimated)
 
 ### v1.1 (2-3 months later)
 - Async/await variants for NR-MLE Hessian computation
