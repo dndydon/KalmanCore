@@ -1,5 +1,25 @@
 import Foundation
 
+/*
+ Extended Kalman Filter (EKF)
+ ---------------------------
+ Nonlinear state-space model with local linearization:
+   x_{k+1} = f(x_k, θ, dt) + w_k,   w_k ~ N(0, Q_k)
+   y_k     = h(x_k) + v_k,          v_k ~ N(0, R)
+ Uses finite-difference linearization to approximate F = ∂f/∂x and H = ∂h/∂x,
+ and performs linear KF update on the linearized system.
+
+ Notes
+ - For SPD covariances, Cholesky-based solvers are preferable; current code uses
+   general routines for clarity (see MatrixUtils).
+ - When analytical Jacobians are available, they can replace the finite-diff ones
+   via a future LinearizableModel interface.
+
+ References
+ - Jazwinski, A.H. (1970). Stochastic Processes and Filtering Theory.
+ - Gelb, A. (1974). Applied Optimal Estimation.
+*/
+
 /// Extended Kalman Filter for nonlinear systems
 /// x_{k+1} = f(x_k, θ, dt) + w_k,   w_k ~ N(0, Q_k)
 /// y_k     = h(x_k) + v_k,          v_k ~ N(0, R)

@@ -48,15 +48,24 @@ This document summarizes the work completed to reach v0.5 milestone of the Kalma
 - **IMPLEMENTATION_ROADMAP.md** (355 lines): Path to v1.0 with phases and timelines
 - **In-code documentation**: Comprehensive docstrings for all public APIs
 
-### Test Suite (28 passing tests)
+### Test Suite (41 passing tests)
 
-- **ExpectationMaximizationTests.swift** (495 lines)
-  - 14 tests covering all aspects of EM algorithm
+- **ExpectationMaximizationTests.swift**
+  - 14 tests covering EM algorithm
   - Parameter recovery, convergence, constraints, edge cases
 
-- **NewtonRaphsonMLETests.swift** (614 lines)
-  - 14 tests covering all aspects of NR-MLE
+- **NewtonRaphsonMLETests.swift**
+  - 14 tests covering NR-MLE
   - Gradient tracking, Hessian computation, line search, comparisons
+
+- **KalmanFilterTests.swift**
+  - 5 tests validating linear KF predict/update, innovations, covariance behavior
+
+- **ExtendedKalmanFilterTests.swift**
+  - 5 tests validating EKF predict/update, partial observations, Jacobian shapes
+
+- **EnKF suites**
+  - Parameter augmentation and EnKF–EM basic behavior
 
 **Test Results**: ✅ All 28 tests passing with Swift Testing framework
 
@@ -80,7 +89,8 @@ This document summarizes the work completed to reach v0.5 milestone of the Kalma
 ### Algorithms ✅
 - Expectation-Maximization (EM) with RTS smoothing
 - Newton-Raphson Maximum Likelihood Estimation
-- Kalman filter (basis for both algorithms)
+- Kalman Filter (linear)
+- Extended Kalman Filter (nonlinear)
 - RTS smoother (backward pass)
 
 ### Stochastic Models ✅
@@ -100,6 +110,7 @@ This document summarizes the work completed to reach v0.5 milestone of the Kalma
 - Parameter bounds enforcement
 - Numerical stability safeguards
 - Convergence tolerance monitoring
+- Accelerate-backed matrix utilities (with small-matrix fallbacks)
 - Adaptive algorithms (EM, NR-MLE)
 
 ---
@@ -116,7 +127,7 @@ This document summarizes the work completed to reach v0.5 milestone of the Kalma
 - **Swift 6.x compatible**: Modern Swift idioms throughout
 - **No external dependencies**: Pure Swift with Accelerate only
 - **Well-documented**: Extensive docstrings and markdown guides
-- **Thoroughly tested**: 28 passing tests with Swift Testing framework
+- **Thoroughly tested**: 41 passing tests with Swift Testing framework
 - **Zero compiler warnings**: Clean build output
 
 ### Performance Characteristics

@@ -80,15 +80,17 @@ Documentation
 ### Phase 2: Additional Filters (High Priority)
 **Estimated effort: 2-3 weeks**
 
+Progress: KF and EKF implemented with tests; UKF and Particle remain.
+
 #### Kalman Filter (Linear)
 - Basic linear Kalman filter
 - Basis for other filters
 - Used in validation
 
 Status / files
-- Implementation target: `Sources/KalmanCore/filters/KalmanFilter.swift` (exists as placeholder; fill in)
+- Implemented: `Sources/KalmanCore/filters/KalmanFilter.swift`
+- [x] Tests: `Tests/KalmanCoreTests/KalmanFilterTests.swift`
 - [ ] Documentation
-- [ ] Tests
 
 #### Extended Kalman Filter (EKF)
 - Nonlinear system support
@@ -96,9 +98,9 @@ Status / files
 - Used in comparisons
 
 Status / files
-- Implementation target: `Sources/KalmanCore/filters/ExtendedKalmanFilter.swift` (exists as placeholder; fill in)
+- Implemented: `Sources/KalmanCore/filters/ExtendedKalmanFilter.swift`
+- [x] Tests: `Tests/KalmanCoreTests/ExtendedKalmanFilterTests.swift`
 - [ ] Documentation
-- [ ] Tests
 
 #### Unscented Kalman Filter (UKF)
 - Sigma point approach
@@ -186,7 +188,7 @@ Status / files
 2. ✅ Section 2.2 - EM algorithm (DONE)
 3. ✅ Section 2.3 - NR-MLE algorithm (DONE)
 4. Section 3.1-3.3 - Sequential parameter estimation (in progress)
-5. Basic filters (KF, EKF)
+5. ✅ Basic filters (KF, EKF)
 6. Comprehensive examples
 7. Production readiness
 

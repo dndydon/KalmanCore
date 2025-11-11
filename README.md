@@ -9,6 +9,12 @@ For Basic Understanding: [Kalman Filter For Dummies](https://bilgin.esme.org/Bit
 
 ## Features
 
+- New in this release:
+  - Linear Kalman Filter and Extended Kalman Filter with tests
+  - Shared Linearization utilities (finite-diff F, H)
+  - Likelihood utilities and Matrix utilities (Accelerate-backed with fallbacks)
+  - EnKF–EM windowed estimator with diagnostics
+
 ### Core Components
 - **Matrix Operations**: Optimized matrix algebra using Accelerate framework
 - **Random Utilities**: Gaussian noise generation with covariance support
@@ -28,17 +34,22 @@ Implementation of stochastic dynamical systems from Pulido et al. (2018):
 - **Identity Observation**: Direct state observation
 - **Partial Observation**: Observe subset of state variables
 
-### Filters (In Development)
-- Kalman Filter (linear)
-- Extended Kalman Filter (EKF)
-- Unscented Kalman Filter (UKF)
-- Ensemble Kalman Filter (EnKF)
-- Particle Filter
+### Filters
+- Kalman Filter (linear) — implemented
+- Extended Kalman Filter (EKF) — implemented
+- Unscented Kalman Filter (UKF) — planned
+- Ensemble Kalman Filter (EnKF, augmented-state) — analysis implemented; ongoing enhancements
+- Particle Filter — planned
 
-### Estimation (In Development)
+### Estimation
 - Expectation-Maximization (EM)
 - Newton-Raphson Maximum Likelihood Estimation (MLE)
 - EnKF–EM (windowed, additive-noise case) — see SECTION_3_2.md
+
+### Section 3 Documentation
+- Augmented-state EnKF — see SECTION_3_1.md
+- EnKF–EM — see SECTION_3_2.md
+- EnKF–NR (stub) — see SECTION_3_3.md
 
 ### Examples
 - Lorenz96 system demonstrations
@@ -64,6 +75,41 @@ Or add it in Xcode via File → Add Package Dependencies.
 - macOS 13.0+ / iOS 16.0+ / tvOS 16.0+ / watchOS 9.0+
 
 ## Usage
+
+### Using KF/EKF
+- Linear KF
+```swift
+import KalmanCore
+
+let F = Matrix.identity(size: 2)
+let Q = Matrix.identity(size: 2) * 0.01
+let H = Matrix.identity(size: 2)
+let R = Matrix.identity(size: 2) * 0.1
+
+let kf = KalmanFilter(F: F, Q: Q, H: H, R: R, x0: [0.0, 0.0], P0: Matrix.identity(size: 2))
+let (state1, res1) = kf.step(y: [1.0, -1.0])
+print("KF state:", state1.x, "LL+:", res1.logLikelihoodIncrement)
+```
+- Extended KF (nonlinear models)
+```swift
+import KalmanCore
+
+let model = Lorenz96Model.standard(stochasticType: .additive)
+let n = model.stateDimension
+let obs = IdentityObservationModel(dimension: n, noiseVariance: 1e-2)
+
+let ekf = ExtendedKalmanFilter(
+  model: model,
+  observationModel: obs,
+  initialState: model.typicalInitialState(),
+  initialCovariance: Matrix.identity(size: n) * 0.1,
+  parameters: [0.3],
+  dt: 0.01
+)
+let y = obs.generateObservation(state: ekf.state.x)
+let (state2, res2) = ekf.step(y: y)
+print("EKF state:", state2.x.prefix(3), "LL+:", res2.logLikelihoodIncrement)
+```
 
 ### Section 3: Sequential Parameter Estimation (EnKF–EM)
 See SECTION_3_2.md for the algorithm outline and a minimal usage example combining the augmented-state EnKF with an EM M-step in the additive-noise case.

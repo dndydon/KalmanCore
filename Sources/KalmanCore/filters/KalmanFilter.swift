@@ -1,5 +1,18 @@
 import Foundation
 
+/*
+ Linear Kalman Filter (KF)
+ ------------------------
+ Time-invariant linear-Gaussian state-space model:
+   x_{k+1} = F x_k + w_k,   w_k ~ N(0, Q)
+   y_k     = H x_k + v_k,   v_k ~ N(0, R)
+ Implements the standard predict/update recursions and returns innovation stats
+ and the per-step log-likelihood increment under Gaussian assumptions.
+
+ Reference
+ - Kalman, R.E. (1960). A new approach to linear filtering and prediction problems.
+*/
+
 /// Linear Kalman Filter for time-invariant systems
 /// x_{k+1} = F x_k + w_k,   w_k ~ N(0, Q)
 /// y_k     = H x_k + v_k,   v_k ~ N(0, R)
