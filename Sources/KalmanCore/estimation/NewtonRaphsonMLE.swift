@@ -390,7 +390,7 @@ public class NewtonRaphsonMLE {
       let S = H * predictedCov * H.transposed + R
 
       // Update log-likelihood
-      logLikelihood += computeLogLikelihoodContribution(innovation: innovation, S: S)
+      logLikelihood += Likelihood.gaussianInnovationLogLikelihood(innovation: innovation, covariance: S)
 
       // Kalman gain
       let K = predictedCov * H.transposed * matrixInverse(S)
@@ -546,17 +546,6 @@ public class NewtonRaphsonMLE {
     return H
   }
 
-  private func computeLogLikelihoodContribution(innovation: [Double], S: Matrix) -> Double {
-    let n = innovation.count
-    let detS = matrixDeterminant(S)
-
-    guard detS > 0 else { return -Double.infinity }
-
-    let Sinv = matrixInverse(S)
-    let mahalanobis = dotProduct(innovation, Sinv.multiply(vector: innovation))
-
-    return -0.5 * (Double(n) * log(2 * .pi) + log(detS) + mahalanobis)
-  }
 }
 
 // MARK: - Linear System Solver

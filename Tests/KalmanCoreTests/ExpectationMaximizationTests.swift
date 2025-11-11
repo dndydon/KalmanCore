@@ -317,6 +317,7 @@ struct ExpectationMaximizationTests {
     #expect(result.parameterHistory.count == result.iterations + 1)
     #expect(result.parameterHistory[0] == [0.1])
     #expect(result.parameterHistory.last == result.parameters)
+    // print(result.parameterHistory)
   }
 
   // MARK: - Log-Likelihood History Tests
@@ -360,6 +361,7 @@ struct ExpectationMaximizationTests {
     )
 
     #expect(result.logLikelihoodHistory.count == result.iterations)
+    print(result.logLikelihoodHistory)
 
     for ll in result.logLikelihoodHistory {
       #expect(ll < 0.0)

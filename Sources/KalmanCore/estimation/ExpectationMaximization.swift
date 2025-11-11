@@ -242,7 +242,7 @@ public class ExpectationMaximization {
       let updatedCov = (Matrix.identity(size: n) - K * H) * predictedCov
 
       // Update log-likelihood
-      logLikelihood += computeLogLikelihoodContribution(innovation: innovation, S: S)
+      logLikelihood += Likelihood.gaussianInnovationLogLikelihood(innovation: innovation, covariance: S)
 
       filteredStates.append(updated)
       filteredCovariances.append(updatedCov)
@@ -403,18 +403,6 @@ public class ExpectationMaximization {
     return H
   }
 
-  private func computeLogLikelihoodContribution(innovation: [Double], S: Matrix) -> Double {
-    let n = innovation.count
-    let detS = matrixDeterminant(S)
-
-    guard detS > 0 else { return -Double.infinity }
-
-    let Sinv = matrixInverse(S)
-    let innovVec = innovation
-    let mahalanobis = dotProduct(innovVec, Sinv.multiply(vector: innovVec))
-
-    return -0.5 * (Double(n) * log(2 * .pi) + log(detS) + mahalanobis)
-  }
 }
 
 // MARK: - Supporting Structures
@@ -444,96 +432,3 @@ func dotProduct(_ a: [Double], _ b: [Double]) -> Double {
   return zip(a, b).map { $0 * $1 }.reduce(0, +)
 }
 
-// MARK: - Matrix Utilities
-
-func matrixInverse(_ matrix: Matrix) -> Matrix {
-  // Simplified inverse for small matrices
-  // In production, use LAPACK routines from Accelerate
-  precondition(matrix.rows == matrix.cols, "Matrix must be square")
-
-  let n = matrix.rows
-
-  if n == 1 {
-    return Matrix(rows: 1, cols: 1, data: [1.0 / matrix[0, 0]])
-  }
-
-  // For larger matrices, use Gauss-Jordan elimination (simplified)
-  var augmented = Matrix(rows: n, cols: 2 * n)
-
-  // Copy matrix and identity
-  for i in 0..<n {
-    for j in 0..<n {
-      augmented[i, j] = matrix[i, j]
-      augmented[i, j + n] = (i == j) ? 1.0 : 0.0
-    }
-  }
-
-  // Forward elimination
-  for i in 0..<n {
-    var pivot = augmented[i, i]
-    if abs(pivot) < 1e-10 {
-      // Add small regularization
-      augmented[i, i] += 1e-6
-      pivot = augmented[i, i]
-    }
-
-    for j in 0..<(2 * n) {
-      augmented[i, j] /= pivot
-    }
-
-    for k in 0..<n {
-      if k != i {
-        let factor = augmented[k, i]
-        for j in 0..<(2 * n) {
-          augmented[k, j] -= factor * augmented[i, j]
-        }
-      }
-    }
-  }
-
-  // Extract inverse
-  var inverse = Matrix(rows: n, cols: n)
-  for i in 0..<n {
-    for j in 0..<n {
-      inverse[i, j] = augmented[i, j + n]
-    }
-  }
-
-  return inverse
-}
-
-func matrixDeterminant(_ matrix: Matrix) -> Double {
-  precondition(matrix.rows == matrix.cols, "Matrix must be square")
-
-  let n = matrix.rows
-
-  if n == 1 {
-    return matrix[0, 0]
-  }
-
-  if n == 2 {
-    return matrix[0, 0] * matrix[1, 1] - matrix[0, 1] * matrix[1, 0]
-  }
-
-  // For larger matrices, use LU decomposition (simplified)
-  // In production, use LAPACK routines
-  var det = 1.0
-  var A = matrix
-
-  for i in 0..<n {
-    if abs(A[i, i]) < 1e-10 {
-      return 1e-10 // Avoid division by zero
-    }
-
-    det *= A[i, i]
-
-    for k in (i + 1)..<n {
-      let factor = A[k, i] / A[i, i]
-      for j in i..<n {
-        A[k, j] -= factor * A[i, j]
-      }
-    }
-  }
-
-  return det
-}
