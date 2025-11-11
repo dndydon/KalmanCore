@@ -77,6 +77,7 @@ public enum RandomUtils {
   }
 
   /// Cholesky decomposition: A = L * L^T
+  /// https://en.wikipedia.org/wiki/Cholesky_decomposition
   /// Returns lower triangular matrix L if A is positive definite, nil otherwise
   private static func choleskyDecomposition(_ matrix: Matrix) -> Matrix? {
     guard matrix.rows == matrix.cols else { return nil }
