@@ -9,14 +9,14 @@ import Foundation
  Features implemented
  - Forecast: state via model.transition, parameters via constant/random-walk/AR(1)
  - Analysis: standard EnKF update using ensemble anomalies, with options for
-   perturbed or deterministic observations (the latter via usePerturbedObservations=false)
+ perturbed or deterministic observations (the latter via usePerturbedObservations=false)
  - Inflation: multiplicative (state-only), additive (state-only)
  - Simple localization: optional global scalar taper applied to state rows of P_zy
 
  References
  - Evensen, G. (1994). Ensemble Kalman filter.
  - Pulido et al. (2018), Section 3 (parameter augmentation for identification)
-*/
+ */
 
 /// Configuration for the augmented-state Ensemble Kalman Filter (EnKF)
 public struct EnKFConfig {
@@ -78,7 +78,7 @@ public final class EnsembleKalmanFilter<Model: StochasticDynamicalSystem> {
 
   public init(model: Model, observationModel: ObservationModel, config: EnKFConfig) {
     precondition(observationModel.stateDimension == model.stateDimension,
-                "Observation/state dimension mismatch")
+                 "Observation/state dimension mismatch")
     self.model = model
     self.observationModel = observationModel
     self.config = config
@@ -139,14 +139,14 @@ public final class EnsembleKalmanFilter<Model: StochasticDynamicalSystem> {
       // Evolve parameters per chosen model
       let thetaNext: [Double]
       switch config.parameterEvolution {
-      case .constant:
-        thetaNext = theta
-      case .randomWalk(let Qtheta):
-        let eta = RandomUtils.generateGaussianNoiseWithCovariance(dimension: parameterDimension, covariance: Qtheta)
-        thetaNext = zip(theta, eta).map(+)
-      case .ar1(let rho, let Qtheta):
-        let eta = RandomUtils.generateGaussianNoiseWithCovariance(dimension: parameterDimension, covariance: Qtheta)
-        thetaNext = theta.map { rho * $0 } .enumerated().map { $1 + eta[$0] }
+        case .constant:
+          thetaNext = theta
+        case .randomWalk(let Qtheta):
+          let eta = RandomUtils.generateGaussianNoiseWithCovariance(dimension: parameterDimension, covariance: Qtheta)
+          thetaNext = zip(theta, eta).map(+)
+        case .ar1(let rho, let Qtheta):
+          let eta = RandomUtils.generateGaussianNoiseWithCovariance(dimension: parameterDimension, covariance: Qtheta)
+          thetaNext = theta.map { rho * $0 } .enumerated().map { $1 + eta[$0] }
       }
 
       nextMembers.append(merge(xNext, thetaNext))
@@ -254,7 +254,7 @@ public final class EnsembleKalmanFilter<Model: StochasticDynamicalSystem> {
         // parameter rows [n ..< n+p] remain unmodified
       }
     }
-
+    
     // Kalman gain
     let S_inv = matrixInverse(S)
     let K = P_zy * S_inv                                    // (n+p)×m
