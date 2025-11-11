@@ -2,6 +2,13 @@
 
 A Swift package implementing various Kalman filtering algorithms and estimation techniques.
 
+##Project overview
+- KalmanCore is a Swift Package (swift-tools-version 6.1) providing numerical primitives, stochastic state-space models, observation models, and parameter-estimation algorithms (EM and Newton–Raphson MLE).
+- Targets: a single library target KalmanCore and a test target KalmanCoreTests.
+- Platforms: macOS 13+, iOS 16+, tvOS 16+, watchOS 9+.
+- External dependencies: none declared in Package.swift; numerics rely on Apple’s Accelerate framework.
+
+
 For Basic Understanding: [Kalman Filter For Dummies](https://bilgin.esme.org/BitsAndBytes/KalmanFilterforDummies)
 
 ![KalmanFilter summary]

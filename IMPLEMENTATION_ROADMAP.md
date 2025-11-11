@@ -1,4 +1,4 @@
-# KalmanCore Swift Framework Implementation Roadmap
+# KalmanCore Swift Package Implementation Roadmap
 
 ## Overview
 
