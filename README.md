@@ -1,4 +1,4 @@
-# KalmanCore
+# KalmanCore README
 
 A Swift package implementing various Kalman filtering algorithms and estimation techniques.
 
@@ -27,7 +27,7 @@ For Basic Understanding: [Kalman Filter For Dummies](https://bilgin.esme.org/Bit
 - **Random Utilities**: Gaussian noise generation with covariance support
 - **Ensemble Structures**: Ensemble representation for EnKF methods
 
-### Stochastic Models (Section 2.1)
+### Stochastic Models [Section 2.1](SECTION_2_1.md)
 Implementation of stochastic dynamical systems from Pulido et al. (2018):
 - **Stochastic Dynamical System Protocol**: dx/dt = M(x, θ) + σ(x, θ)ξ(t)
 - **Lorenz96 Model**: Classic chaotic system with multiple stochastic parameterization types
@@ -51,12 +51,12 @@ Implementation of stochastic dynamical systems from Pulido et al. (2018):
 ### Estimation
 - Expectation-Maximization (EM)
 - Newton-Raphson Maximum Likelihood Estimation (MLE)
-- EnKF–EM (windowed, additive-noise case) — see SECTION_3_2.md
+- EnKF–EM (windowed, additive-noise case) — see [Section 3.2](SECTION_3_2.md)
 
 ### Section 3 Documentation
-- Augmented-state EnKF — see SECTION_3_1.md
-- EnKF–EM — see SECTION_3_2.md
-- EnKF–NR (stub) — see SECTION_3_3.md
+- Augmented-state EnKF — see [Section 3.1](SECTION_3_1.md)
+- EnKF–EM — see [Section 3.2](SECTION_3_2.md)
+- EnKF–NR (stub) — see [Section 3.3](SECTION_3_3.md)
 
 ### Examples
 - Lorenz96 system demonstrations
@@ -119,7 +119,7 @@ print("EKF state:", state2.x.prefix(3), "LL+:", res2.logLikelihoodIncrement)
 ```
 
 ### Section 3: Sequential Parameter Estimation (EnKF–EM)
-See SECTION_3_2.md for the algorithm outline and a minimal usage example combining the augmented-state EnKF with an EM M-step in the additive-noise case.
+See [Section 3.2](SECTION_3_2.md) for the algorithm outline and a minimal usage example combining the augmented-state EnKF with an EM M-step in the additive-noise case.
 
 ### Section 2.1: Stochastic Parameterization
 
@@ -172,7 +172,7 @@ Lorenz96Demo.runAll()
 
 ## License
 
-[./LICENSE.txt]
+[LICENSE](./LICENSE.txt)
 
 ## Contributing
 
