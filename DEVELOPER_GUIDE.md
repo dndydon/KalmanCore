@@ -16,10 +16,14 @@ KalmanCore/
 │   ├── protocols/               # Abstract interfaces
 │   └── examples/                # Demonstrations
 ├── Tests/KalmanCoreTests/       # Test suite
+├── benchmarks/                  # EnKF micro-benchmarks (EnKFBench executable)
 ├── README.md                    # User-facing documentation
 ├── SECTION_2_1.md               # Framework documentation
 ├── SECTION_2_2.md               # EM algorithm documentation
 ├── SECTION_2_3.md               # NR-MLE documentation
+├── SECTION_3_1.md               # EnKF with parameter augmentation
+├── SECTION_3_2.md               # EnKF–EM
+├── SECTION_3_3.md               # EnKF–NR (stub)
 ├── IMPLEMENTATION_ROADMAP.md    # Path to v1.0
 └── COMPLETION_SUMMARY.md        # Current status
 ```
@@ -253,6 +257,9 @@ swift build --clean
 
 # Show test names
 swift test --list
+
+# Run EnKF micro-benchmarks
+swift run enkf-bench
 ```
 
 ## Performance Guidelines
@@ -291,6 +298,6 @@ swift test --list
 
 ---
 
-**Last Updated**: November 7, 2025
+**Last Updated**: November 13, 2025
 **Version**: v0.5
 **Next Phase**: Section 3 - Sequential Parameter Estimation

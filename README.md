@@ -207,6 +207,36 @@ let observation = obsModel.generateObservation(state: initialState)
 Lorenz96Demo.runAll()
 ```
 
+## How to run the EnKF benchmark
+
+The package includes a micro-benchmark executable to sanity-check EnKF performance across modes and ensemble sizes.
+
+Quick start
+```bash
+swift run enkf-bench
+```
+
+Optional environment variables
+- ENKF_BENCH_N: state dimension (default 40)
+- ENKF_BENCH_STEPS: number of forecast/analysis steps (default 50)
+- ENKF_BENCH_ENSEMBLES: comma-separated ensemble sizes (default 10,20,40)
+- ENKF_BENCH_LOCALIZE: true/false (default false)
+- ENKF_BENCH_SQRT: true/false (default true)
+
+Examples
+```bash
+# Default run
+swift run enkf-bench
+
+# Localized, square-root analysis, multiple ensemble sizes
+ENKF_BENCH_LOCALIZE=true ENKF_BENCH_SQRT=true ENKF_BENCH_ENSEMBLES=10,20,40 swift run enkf-bench
+
+# Larger state and more steps
+ENKF_BENCH_N=80 ENKF_BENCH_STEPS=100 swift run enkf-bench
+```
+
+See also: benchmarks/README.md for notes.
+
 ## License
 
 [LICENSE](./LICENSE.txt)

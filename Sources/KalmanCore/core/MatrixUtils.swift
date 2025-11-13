@@ -146,7 +146,7 @@ private func inverseAccelerate(_ A: Matrix) -> Matrix? {
 }
 
 private func determinantAccelerate(_ A: Matrix) -> Double? {
-  var n32 = __CLPK_integer(A.rows)
+  let n32 = __CLPK_integer(A.rows)
   var m = n32
   var nn = n32
   var lda = n32

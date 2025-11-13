@@ -6,6 +6,12 @@ This document summarizes the work completed to reach v0.5 milestone of the Kalma
 
 ---
 
+## Recent Updates (Nov 12–13, 2025)
+- EnKF: added square-root analysis mode and Schur (Gaspari–Cohn) localization for Identity/Partial observation models.
+- Benchmarks: added EnKFBench executable target (`swift run enkf-bench`) with environment-configurable parameters.
+- Documentation: updated Section 3.1 notes and high-level README pointers.
+- Numerics: minor determinant binding cleanup in `MatrixUtils`.
+
 ## What Was Accomplished
 
 ### Core Implementation (3,500+ lines of production code)
@@ -67,7 +73,7 @@ This document summarizes the work completed to reach v0.5 milestone of the Kalma
 - **EnKF suites**
   - Parameter augmentation and EnKF–EM basic behavior
 
-**Test Results**: ✅ All 28 tests passing with Swift Testing framework
+**Test Results**: ✅ All tests passing (41 tests across 7 suites) with Swift Testing framework
 
 ---
 
@@ -327,6 +333,6 @@ This implementation faithfully follows the mathematical framework presented in P
 
 ---
 
-**Last Updated**: November 7, 2025
+**Last Updated**: November 13, 2025
 **Status**: v0.5 (Sections 2.1-2.3 Complete)
 **Next Phase**: Section 3 - Sequential Parameter Estimation

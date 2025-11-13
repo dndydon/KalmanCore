@@ -48,8 +48,9 @@ Current status (in progress)
 - Augmented-state EnKF implemented (initial version):
   - Forecast step with parameter evolution: `.constant`, `.randomWalk(Qθ)`, `.ar1(ρ,Qθ)`
   - Analysis step (perturbed/deterministic) with augmented gain K using ensemble anomalies
+  - Analysis modes: stochastic (perturbed obs) and square-root (deterministic)
   - Inflation: multiplicative (state-only), additive (state-only)
-  - Simple localization: global scalar taper on state rows of P_zy
+  - Localization: Schur (Gaspari–Cohn), 1D periodic, for Identity/Partial observation models
   - File: `Sources/KalmanCore/filters/EnsembleKalmanFilter.swift`
 - Combined algorithms:
   - EnKF–EM: windowed run with tight-loop additive M-step (re-assimilates each EM iter)
@@ -172,7 +173,11 @@ Next up (UKF)
 - Convergence analysis
 - Scalability testing
 
-**Files to create:**
+Progress
+- Initial micro-benchmark implemented: EnKFBench executable target (`swift run enkf-bench`)
+  - Files: `benchmarks/EnKFBenchMain.swift`, `benchmarks/README.md`
+
+Planned files (later)
 - `benchmarks/PerformanceBenchmark.swift` (~300 lines)
 - `benchmarks/ConvergenceAnalysis.swift` (~250 lines)
 

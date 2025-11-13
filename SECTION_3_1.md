@@ -79,6 +79,16 @@ print("Analysis mean state:", Z.mean.prefix(5))
 
 ## Notes
 
+### Benchmark flags → EnKFConfig mapping
+- ENKF_BENCH_SQRT=true → useSquareRootAnalysis = true, usePerturbedObservations = false
+- ENKF_BENCH_SQRT=false → useSquareRootAnalysis = false, usePerturbedObservations = true
+- ENKF_BENCH_LOCALIZE=true → localization = .schurGaspariCohn1D(lengthScale: max(4.0, n/8), periodic: true)
+- ENKF_BENCH_LOCALIZE=false → localization = .none
+- ENKF_BENCH_ENSEMBLES=10,20,40 → ensembleSize ∈ {10,20,40} (looped in benchmark)
+- ENKF_BENCH_N, ENKF_BENCH_STEPS control the model dimension and number of forecast/analysis cycles (not part of EnKFConfig)
+
+See README (“How to run the EnKF benchmark”) for commands.
+
 - Localization support (Stage 1): builds an n×m taper for state–obs using 1D (optionally periodic) distances.
   - For Identity/Partial observation models, observed indices are inferred automatically; otherwise pass observedIndices or localization is skipped.
   - Parameters are not localized in this stage.

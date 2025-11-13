@@ -1,3 +1,41 @@
+# Session Notes – 2025-11-12
+
+This document captures today’s changes and next actions.
+
+## Summary of changes
+- Core numerics: fixed determinantAccelerate binding (use `let` for `n32`) in `Sources/KalmanCore/core/MatrixUtils.swift`; minor cleanup.
+- EnKF ecosystem: documented square-root analysis path and Schur (Gaspari–Cohn) localization; added executable micro-benchmark target `enkf-bench` (see `benchmarks/`); updated EnKF tests and `SECTION_3_1.md` notes.
+
+## Open tasks (priority)
+1) UKF
+   - Implement roadmap checklist (sigma points, weights, predict/update, SPD safeguards, optional square-root variant)
+   - Add tests; brief doc note + README snippet
+2) EnKF–NR
+   - Implement windowed innovation-based log-likelihood
+   - Finite-difference gradients/Hessian with cached randomness
+   - Newton loop with line search and bounds; expand SECTION_3_3.md beyond stub
+3) EnKF (augmented)
+   - Optional deterministic square-root variant (refinement)
+4) Docs
+   - Add brief API docs for EnKF and update SECTION_3_x references
+
+## Suggested next steps (tomorrow)
+- Run `swift run enkf-bench` across several ensemble sizes to sanity-check performance for localization and square-root modes.
+- Scaffold `UnscentedKalmanFilter.swift` (scaled UT) and basic tests.
+- Implement EnKF–NR windowed likelihood evaluator and minimal tests.
+
+## Useful commands
+- Build: `swift build`
+- Run all tests: `swift test`
+- Run EnKF micro-benchmarks: `swift run enkf-bench`
+
+## Pointers
+- Matrix utils: `Sources/KalmanCore/core/MatrixUtils.swift`
+- EnKF: `Sources/KalmanCore/filters/EnsembleKalmanFilter.swift`
+- Benchmarks: `benchmarks/EnKFBenchMain.swift`, `benchmarks/README.md`
+- Docs: `SECTION_3_1.md`, `SECTION_3_2.md`, `SECTION_3_3.md`
+- Roadmap: `IMPLEMENTATION_ROADMAP.md`
+
 # Session Notes – 2025-11-11
 
 This document captures today’s changes and next actions.
