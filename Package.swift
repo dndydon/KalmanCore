@@ -16,6 +16,10 @@ let package = Package(
         .library(
             name: "KalmanCore",
             targets: ["KalmanCore"]),
+        .executable(
+            name: "enkf-bench",
+            targets: ["EnKFBench"]
+        ),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -25,6 +29,11 @@ let package = Package(
         .target(
             name: "KalmanCore",
             dependencies: []),
+        .executableTarget(
+            name: "EnKFBench",
+            dependencies: ["KalmanCore"],
+            path: "benchmarks"
+        ),
         .testTarget(
             name: "KalmanCoreTests",
             dependencies: ["KalmanCore"]),

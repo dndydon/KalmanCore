@@ -30,8 +30,9 @@ struct EnKFEMParameterRecoveryTests {
       inflation: 1.05,
       additiveInflation: nil,
       parameterEvolution: .constant,
+      useSquareRootAnalysis: false,
       usePerturbedObservations: false,
-      localizationRadius: 0.9, // light taper
+      localization: LocalizationConfig(method: .none),
       verbose: false
     )
     let enkf = EnsembleKalmanFilter(model: model, observationModel: obsModel, config: enkfConfig)

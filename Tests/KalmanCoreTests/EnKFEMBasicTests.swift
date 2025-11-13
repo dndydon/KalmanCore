@@ -17,8 +17,9 @@ struct EnKFEMBasicTests {
       inflation: 1.0,
       additiveInflation: nil,
       parameterEvolution: .constant,
+      useSquareRootAnalysis: false,
       usePerturbedObservations: false,
-      localizationRadius: nil,
+      localization: LocalizationConfig(method: .none),
       verbose: false
     )
     let enkf = EnsembleKalmanFilter(model: model, observationModel: obsModel, config: enkfConfig)

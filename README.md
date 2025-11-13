@@ -2,17 +2,17 @@
 
 A Swift package implementing various Kalman filtering algorithms and estimation techniques.
 
-##Project overview
+## Project overview
 - KalmanCore is a Swift Package (swift-tools-version 6.1) providing numerical primitives, stochastic state-space models, observation models, and parameter-estimation algorithms (EM and Newton–Raphson MLE).
 - Targets: a single library target KalmanCore and a test target KalmanCoreTests.
 - Platforms: macOS 13+, iOS 16+, tvOS 16+, watchOS 9+.
 - External dependencies: none declared in Package.swift; numerics rely on Apple’s Accelerate framework.
 
 
-For Basic Understanding: [Kalman Filter For Dummies](https://bilgin.esme.org/BitsAndBytes/KalmanFilterforDummies)
+## For Basic Understanding: 
+[Kalman Filter For Dummies](https://bilgin.esme.org/BitsAndBytes/KalmanFilterforDummies)
 
-![KalmanFilter summary]
-(https://bilgin.esme.org/Content/Images/BitsAndBytes/KalmanFilterForDummies/iteration_steps.gif)
+[KalmanFilter summary](https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/)
 
 ```mermaid
 stateDiagram-v2
@@ -63,7 +63,8 @@ stateDiagram-v2
 - **Random Utilities**: Gaussian noise generation with covariance support
 - **Ensemble Structures**: Ensemble representation for EnKF methods
 
-### Stochastic Models [Section 2.1](SECTION_2_1.md)
+### Stochastic Models 
+[Section 2.1](SECTION_2_1.md)
 Implementation of stochastic dynamical systems from Pulido et al. (2018):
 - **Stochastic Dynamical System Protocol**: dx/dt = M(x, θ) + σ(x, θ)ξ(t)
 - **Lorenz96 Model**: Classic chaotic system with multiple stochastic parameterization types
@@ -81,7 +82,7 @@ Implementation of stochastic dynamical systems from Pulido et al. (2018):
 - Kalman Filter (linear) — implemented
 - Extended Kalman Filter (EKF) — implemented
 - Unscented Kalman Filter (UKF) — planned
-- Ensemble Kalman Filter (EnKF, augmented-state) — analysis implemented; ongoing enhancements
+- Ensemble Kalman Filter (EnKF, augmented-state) — stochastic and square-root analysis paths; Schur (Gaspari–Cohn) localization (state–obs) for Identity/Partial obs; ongoing enhancements
 - Particle Filter — planned
 
 ### Estimation
@@ -90,7 +91,7 @@ Implementation of stochastic dynamical systems from Pulido et al. (2018):
 - EnKF–EM (windowed, additive-noise case) — see [Section 3.2](SECTION_3_2.md)
 
 ### Section 3 Documentation
-- Augmented-state EnKF — see [Section 3.1](SECTION_3_1.md)
+- Augmented-state EnKF (square-root + Schur localization) — see [Section 3.1](SECTION_3_1.md)
 - EnKF–EM — see [Section 3.2](SECTION_3_2.md)
 - EnKF–NR (stub) — see [Section 3.3](SECTION_3_3.md)
 

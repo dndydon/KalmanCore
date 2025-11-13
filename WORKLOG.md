@@ -49,7 +49,7 @@ This document captures today’s changes and next actions.
 
 # Session Notes – 2025-11-08
 
-This document captures the context and next actions from today’s work so it’s easy to resume tomorrow.
+This document captures the context and next actions from today’s work so it’s easy to resume.
 
 ## Summary of changes
 - Added WARP.md with commands and architecture overview; added integration section (Xcode + SwiftPM).
