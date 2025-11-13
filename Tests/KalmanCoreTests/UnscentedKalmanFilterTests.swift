@@ -13,7 +13,7 @@ struct UnscentedKalmanFilterTests {
     let x0 = model.typicalInitialState()
     let P0 = Matrix.identity(size: n) * 0.2
 
-    var ukf = UnscentedKalmanFilter(model: model,
+    let ukf = UnscentedKalmanFilter(model: model,
                                     observationModel: obs,
                                     initialState: x0,
                                     initialCovariance: P0,
@@ -33,7 +33,7 @@ struct UnscentedKalmanFilterTests {
     let x0 = model.typicalInitialState()
     let P0 = Matrix.identity(size: n) * 0.2
 
-    var ukf = UnscentedKalmanFilter(model: model,
+    let ukf = UnscentedKalmanFilter(model: model,
                                     observationModel: obs,
                                     initialState: x0,
                                     initialCovariance: P0,
@@ -57,7 +57,7 @@ struct UnscentedKalmanFilterTests {
     let x0 = model.typicalInitialState()
     let P0 = Matrix.identity(size: n) * 0.2
 
-    var ukf = UnscentedKalmanFilter(model: model,
+    let ukf = UnscentedKalmanFilter(model: model,
                                     observationModel: obs,
                                     initialState: x0,
                                     initialCovariance: P0,

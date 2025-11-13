@@ -32,7 +32,7 @@ struct ParticleFilterTests {
     let n = model.stateDimension
     let obs = IdentityObservationModel(dimension: n, noiseVariance: 1e-2)
 
-    var pf = ParticleFilter(model: model,
+    let pf = ParticleFilter(model: model,
                             observationModel: obs,
                             x0: model.typicalInitialState(),
                             P0: Matrix.identity(size: n) * 0.2,

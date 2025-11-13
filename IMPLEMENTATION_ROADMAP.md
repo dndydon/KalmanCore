@@ -116,13 +116,14 @@ Status / files
 - [x] Documentation: `SECTION_3_4.md`
 
 Next up (UKF)
-- [ ] Sigma point generation (scaled UT): configure α, β, κ; ensure reproducible ordering
-- [ ] Time update: propagate sigma points through model.transition; compute mean/cov (with process noise)
-- [ ] Measurement update: propagate sigma points through observation; compute innovation stats and cross-covariance; gain
-- [ ] Numerical stability: use Cholesky (SPD) for square roots; add small jitter to keep covariances SPD
+- [x] Sigma point generation (scaled UT): configure α, β, κ; ensure reproducible ordering
+- [x] Time update: propagate sigma points through model.transition; compute mean/cov (with process noise)
+- [x] Measurement update: propagate sigma points through observation; compute innovation stats and cross-covariance; gain
+- [x] Numerical stability: use Cholesky (SPD) for square roots; add small jitter to keep covariances SPD
 - [ ] Optional: Square-root UKF variant for better stability/performance
-- [ ] Tests: shapes and SPD checks, partial observation case, linear-consistency vs KF, LL finiteness, basic recovery on Lorenz96 small dt
-- [ ] Docs: brief SECTION_3_x note and README snippet
+- [x] Tests: initial suite (shapes/SPD checks via positive determinant, partial observation case, LL finiteness)
+- [ ] Tests: add linear-consistency vs KF and basic recovery on Lorenz96 (small dt)
+- [x] Docs: brief SECTION_3_4 note and README snippet
 
 ### Phase 3: Advanced Features (Medium Priority)
 **Estimated effort: 1-2 weeks**
@@ -314,10 +315,10 @@ Each major section should include:
 Sections 2.1-2.3 fully implemented with comprehensive tests
 
 ### Milestone 2: Sequential Estimation (In Progress)
-Section 3.1-3.3: EnKF augmented-state and basic tests in place; next: connect EnKF–EM M-step and implement EnKF–NR likelihood
+Section 3.1-3.3: EnKF augmented-state and EnKF–EM tight loop implemented and tested; next: implement EnKF–NR windowed likelihood and Newton loop (grad/Hessian with cached randomness).
 
-### Milestone 3: Filter Suite (Target: Week 6)
-KF, EKF, UKF all functional and tested
+### Milestone 3: Filter Suite (✅ ACHIEVED)
+KF, EKF, UKF implemented and tested; Particle Filter scaffold added (advanced features continue under Phase 3).
 
 ### Milestone 4: Publication Ready (Target: Week 12)
 v1.0 released with full documentation and examples
