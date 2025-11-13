@@ -81,9 +81,9 @@ Implementation of stochastic dynamical systems from Pulido et al. (2018):
 ### Filters
 - Kalman Filter (linear) — implemented
 - Extended Kalman Filter (EKF) — implemented
-- Unscented Kalman Filter (UKF) — planned
+- Unscented Kalman Filter (UKF) — implemented (scaled UT, non–square-root variant)
 - Ensemble Kalman Filter (EnKF, augmented-state) — stochastic and square-root analysis paths; Schur (Gaspari–Cohn) localization (state–obs) for Identity/Partial obs; ongoing enhancements
-- Particle Filter — planned
+- Particle Filter (SIR) — scaffold implemented (systematic/multinomial resampling)
 
 ### Estimation
 - Expectation-Maximization (EM)
@@ -94,6 +94,8 @@ Implementation of stochastic dynamical systems from Pulido et al. (2018):
 - Augmented-state EnKF (square-root + Schur localization) — see [Section 3.1](SECTION_3_1.md)
 - EnKF–EM — see [Section 3.2](SECTION_3_2.md)
 - EnKF–NR (stub) — see [Section 3.3](SECTION_3_3.md)
+- UKF (brief notes) — see [Section 3.4](SECTION_3_4.md)
+- Particle Filter (brief notes) — see [Section 3.5](SECTION_3_5.md)
 
 ### Examples
 - Lorenz96 system demonstrations
@@ -120,7 +122,7 @@ Or add it in Xcode via File → Add Package Dependencies.
 
 ## Usage
 
-### Using KF/EKF
+### Using KF/EKF/UKF
 - Linear KF
 ```swift
 import KalmanCore
@@ -153,6 +155,35 @@ let ekf = ExtendedKalmanFilter(
 let y = obs.generateObservation(state: ekf.state.x)
 let (state2, res2) = ekf.step(y: y)
 print("EKF state:", state2.x.prefix(3), "LL+:", res2.logLikelihoodIncrement)
+```
+
+- UKF (non–square-root) and Particle Filter (SIR)
+```swift
+import KalmanCore
+
+let model = Lorenz96Model.standard(stochasticType: .additive)
+let n = model.stateDimension
+let obs = IdentityObservationModel(dimension: n, noiseVariance: 1e-2)
+
+var ukf = UnscentedKalmanFilter(model: model,
+                                observationModel: obs,
+                                initialState: model.typicalInitialState(),
+                                initialCovariance: Matrix.identity(size: n) * 0.2,
+                                parameters: [0.3],
+                                dt: 0.01)
+let y = obs.generateObservation(state: ukf.state.x)
+let (_, ukfRes) = ukf.step(y: y)
+print("UKF LL+:", ukfRes.logLikelihoodIncrement)
+
+var pf = ParticleFilter(model: model,
+                        observationModel: obs,
+                        x0: model.typicalInitialState(),
+                        P0: Matrix.identity(size: n) * 0.2,
+                        parameters: [0.3],
+                        dt: 0.01,
+                        config: .init(numParticles: 200))
+let (_, pfRes) = pf.step(y: y)
+print("PF ESS:", pfRes.ess)
 ```
 
 ### Section 3: Sequential Parameter Estimation (EnKF–EM)

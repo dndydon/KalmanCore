@@ -111,9 +111,9 @@ Status / files
 - Performance comparison
 
 Status / files
-- Implementation target: `Sources/KalmanCore/filters/UnscentedKalmanFilter.swift` (exists as placeholder; fill in)
-- [ ] Documentation
-- [ ] Tests
+- Implemented: `Sources/KalmanCore/filters/UnscentedKalmanFilter.swift` (scaled UT, non–square-root)
+- [x] Tests: `Tests/KalmanCoreTests/UnscentedKalmanFilterTests.swift`
+- [x] Documentation: `SECTION_3_4.md`
 
 Next up (UKF)
 - [ ] Sigma point generation (scaled UT): configure α, β, κ; ensure reproducible ordering
@@ -132,10 +132,10 @@ Next up (UKF)
 - Resampling methods
 - Comparison with Kalman variants
 
-**Files to create:**
-- `filters/ParticleFilter.swift` (~350 lines)
-- Documentation
-- Tests
+Status / files
+- Scaffold implemented: `Sources/KalmanCore/filters/ParticleFilter.swift` (SIR with systematic/multinomial resampling)
+- [x] Tests: `Tests/KalmanCoreTests/ParticleFilterTests.swift`
+- [x] Documentation: `SECTION_3_5.md`
 
 #### Multi-model Support
 - Adaptive model selection
