@@ -154,13 +154,6 @@ swift test
 swift package generate-documentation
 ```
 
-## What's Next?
-
-This implementation covers Section 2.1 (framework setup). Future additions:
-- Section 2.2: Ensemble Kalman Filter
-- Section 2.3: Maximum Likelihood parameter estimation
-- Section 3: Combined EnKF-ML algorithm
-
 ## Learn More
 
 - Full documentation: `SECTION_2_1.md`

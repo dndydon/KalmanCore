@@ -1,6 +1,9 @@
 import Foundation
 import Accelerate
 
+/// https://developer.apple.com/documentation/accelerate/using-vdsp-for-vector-based-arithmetic
+/// https://developer.apple.com/documentation/accelerate/vdsp-library
+
 /// A matrix structure optimized for numerical computations using Accelerate framework
 public struct Matrix {
   public let rows: Int
