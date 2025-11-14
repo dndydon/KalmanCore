@@ -91,11 +91,11 @@ Implementation of stochastic dynamical systems from Pulido et al. (2018):
 - EnKF–EM (windowed, additive-noise case) — see [Section 3.2](SECTION_3_2.md)
 
 ### Section 3 Documentation
-- Augmented-state EnKF (square-root + Schur localization) — see [Section 3.1](SECTION_3_1.md)
-- EnKF–EM — see [Section 3.2](SECTION_3_2.md)
-- EnKF–NR (stub) — see [Section 3.3](SECTION_3_3.md)
-- UKF (brief notes) — see [Section 3.4](SECTION_3_4.md)
-- Particle Filter (brief notes) — see [Section 3.5](SECTION_3_5.md)
+- [Section 3.1](SECTION_3_1.md) Augmented-state EnKF (square-root + Schur localization)
+- [Section 3.2](SECTION_3_2.md) EnKF–EM
+- [Section 3.3](SECTION_3_3.md) EnKF–NR (stub)
+- [Section 3.4](SECTION_3_4.md) UKF (brief notes)
+- [Section 3.5](SECTION_3_5.md) Particle Filter (brief notes)
 
 ### Examples
 - Lorenz96 system demonstrations
@@ -186,9 +186,6 @@ let (_, pfRes) = pf.step(y: y)
 print("PF ESS:", pfRes.ess)
 ```
 
-### Section 3: Sequential Parameter Estimation (EnKF–EM)
-See [Section 3.2](SECTION_3_2.md) for the algorithm outline and a minimal usage example combining the augmented-state EnKF with an EM M-step in the additive-noise case.
-
 ### Section 2.1: Stochastic Parameterization
 
 ```swift
@@ -238,6 +235,9 @@ let observation = obsModel.generateObservation(state: initialState)
 Lorenz96Demo.runAll()
 ```
 
+### Section 3: Sequential Parameter Estimation (EnKF–EM)
+See [Section 3.2](SECTION_3_2.md) for the algorithm outline and a minimal usage example combining the augmented-state EnKF with an EM M-step in the additive-noise case.
+
 ## How to run the EnKF benchmark
 
 The package includes a micro-benchmark executable to sanity-check EnKF performance across modes and ensemble sizes.
@@ -270,7 +270,7 @@ See also: benchmarks/README.md for notes.
 
 ## License
 
-[LICENSE](./LICENSE.txt)
+[LICENSE](LICENSE.txt)
 
 ## Contributing
 
