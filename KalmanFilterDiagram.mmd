@@ -1,0 +1,36 @@
+```mermaid
+stateDiagram-v2
+	direction LR
+
+	[*] --> Predict
+	Predict --> Update
+	Update --> [*]
+
+	state "Control Input" as Uk
+	state "New Measurements" as Zk
+	Uk --> Predict
+	Zk --> Update
+	Update --> Predict
+
+	state "Predict (Process Model)" as Predict {
+		[*] --> Xpred
+		state "State Predicted" as Xpred
+		Xpred --> Ppred
+		state "Covariance Predicted" as Ppred
+		Ppred --> [*]
+	}
+
+	state "Update (Measurement Model)" as Update {
+		[*] --> Innov
+		state "Measurement Residual" as Innov
+		Innov --> Sk
+		state "Covariance Residual" as Sk
+		Sk --> Kgain
+		state "Kalman Gain" as Kgain
+		Kgain --> Xpost
+		state "State Posterior" as Xpost
+		Xpost --> Ppost
+		state "Covariance Posterior" as Ppost
+		Ppost --> [*]
+	}
+```

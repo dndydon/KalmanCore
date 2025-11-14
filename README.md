@@ -22,31 +22,31 @@ stateDiagram-v2
 	Predict --> Update
 	Update --> [*]
 
-	state "u_k (Control)" as Uk
-	state "z_k (Measurement)" as Zk
+	state "Control Input" as Uk
+	state "New Measurements" as Zk
 	Uk --> Predict
 	Zk --> Update
 	Update --> Predict
 
 	state "Predict (Process Model)" as Predict {
 		[*] --> Xpred
-		state "x_k^- = F x_k-1 + B u_k (statePredicted)" as Xpred
+		state "State Predicted" as Xpred
 		Xpred --> Ppred
-		state "P_k^- = F P_k-1 F^T + Q (covariancePredicted)" as Ppred
+		state "Covariance Predicted" as Ppred
 		Ppred --> [*]
 	}
 
 	state "Update (Measurement Model)" as Update {
 		[*] --> Innov
-		state "y_k = z_k - H x_k^- (measurementResidual)" as Innov
+		state "Measurement Residual" as Innov
 		Innov --> Sk
-		state "S_k = H P_k^- H^T + R (covarianceResidual)" as Sk
+		state "Covariance Residual" as Sk
 		Sk --> Kgain
-		state "K_k = P_k^- H^T S_k^-1 (KalmanGain)" as Kgain
+		state "Kalman Gain" as Kgain
 		Kgain --> Xpost
-		state "x_k = x_k^- + K_k y_k (statePosterior)" as Xpost
+		state "State Posterior" as Xpost
 		Xpost --> Ppost
-		state "P_k = (I - K_k H) P_k^- (covariancePosterior)" as Ppost
+		state "Covariance Posterior" as Ppost
 		Ppost --> [*]
 	}
 ```
@@ -272,7 +272,6 @@ See also: benchmarks/README.md for notes.
 ## License
 
 [LICENSE](LICENSE)
-[LICENSE](blob/main/LICENSE)
 
 ## Contributing
 
