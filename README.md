@@ -271,6 +271,7 @@ See also: benchmarks/README.md for notes.
 
 ## License
 
+[LICENSE](LICENSE)
 [LICENSE](blob/main/LICENSE)
 
 ## Contributing
