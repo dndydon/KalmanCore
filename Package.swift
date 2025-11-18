@@ -1,6 +1,10 @@
 // swift-tools-version: 6.1
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
+/// Concurrency requires the Swift 5 language mode and a version of the Swift standard
+/// library that provides the corresponding concurrency types. On Apple platforms, set a
+/// deployment target of at least iOS 13, macOS 10.15, tvOS 13, watchOS 6, or visionOS 1.
+
 import PackageDescription
 
 let package = Package(

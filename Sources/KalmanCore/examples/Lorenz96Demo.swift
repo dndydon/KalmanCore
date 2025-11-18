@@ -40,7 +40,9 @@ public class Lorenz96Demo {
     let mean = Lorenz96Model.climatologicalMean(trajectory: trajectory)
     let meanValue = mean.reduce(0, +) / Double(mean.count)
     print("Mean state value: \(String(format: "%.3f", meanValue))")
-    
+    let covariance = Lorenz96Model.climatologicalCovariance(trajectory: trajectory)
+    print("Covariance matrix:\n\(covariance)")
+
     print("✓ Basic simulation complete\n")
   }
   

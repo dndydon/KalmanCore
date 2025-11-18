@@ -45,20 +45,66 @@ public class Lorenz96Model: BaseStochasticSystem {
     super.init(stateDimension: dimension, parameterDimension: paramDim)
   }
 
-  /// Deterministic Lorenz96 dynamics
+  /// Deterministic Lorenz96 dynamics (continuous-time right-hand side)
+  /// Implements the classic n-dimensional Lorenz-96 system with cyclic (periodic)
+  /// indexing:
+  ///   dx_i/dt = (x_{i+1} - x_{i-2}) x_{i-1} - x_i + F
+  /// where indices are taken modulo n. The three terms are:
+  ///   - (x_{i+1} - x_{i-2}) x_{i-1}: nonlinear advection-like coupling
+  ///   - −x_i: linear damping
+  ///   - +F: constant external forcing (set by `forcing` property)
+  /// Notes
+  /// - `parameters` are not used here — they control the stochastic parameterization σ(x,θ)
+  ///   in `stochasticParameterization`; the deterministic drift uses `forcing` only.
+  /// - This function returns the instantaneous time derivative dx/dt; time discretization
+  ///   (e.g., Euler–Maruyama) is performed by callers like `transition(state:parameters:dt:)`.
   override public func deterministicDynamics(state: [Double], parameters: [Double]) -> [Double] {
     let n = stateDimension
+
+    /* comment out if you hate inline tests
+    precondition(state.count == n, "Lorenz96Model.deterministicDynamics: state.count (\(state.count)) must equal stateDimension (\(n))")
+    // Enforce parameter arity based on stochasticType. Deterministic drift doesn't
+    // use parameters numerically, but we validate shape to catch test misconfigurations.
+    switch stochasticType {
+      case .diagonal:
+        // Must provide one parameter per state variable
+        precondition(parameters.count == parameterDimension, "Lorenz96Model.deterministicDynamics: parameters.count (\(parameters.count)) must equal parameterDimension (\(parameterDimension)) for .diagonal stochasticType")
+      case .additive, .stateDependent:
+        // Must provide empty (zero count) parameter for one state variable
+        // Expect a single parameter (theta_0). Allow empty for callers that omit it
+        // during purely deterministic steps.
+        if parameters.count == 0 {
+          //print("\(parameters.count) parameters implies parameterDimension == 1 (\(parameterDimension)) for \(stochasticType)")
+          precondition(parameterDimension == 1, "parameters.count (\(parameters.count)) may be equal to zero (0) for \(stochasticType)")
+        } else {
+          if parameters.count > 1 {
+            fatalError("WARNING: \(parameters.count) parameters for \(stochasticType); only using first (\(parameterDimension))")
+          }
+          //print("\(parameters.count) parameters: expecting exactly one (\(parameterDimension)) parameterDimension for \(stochasticType)")
+          precondition(parameters.count == parameterDimension, "Lorenz96Model.deterministicDynamics: parameters.count (\(parameters.count)) must equal parameterDimension (\(parameterDimension)) for \(stochasticType)")
+        }
+    }
+    */
+
+    // Allocate derivative vector
     var dxdt = [Double](repeating: 0.0, count: n)
 
     for i in 0..<n {
-      let im2 = (i - 2 + n) % n  // Periodic boundary conditions
+      // Cyclic neighbor indices with periodic boundary conditions:
+      // im2 = i-2, im1 = i-1, ip1 = i+1 (all wrapped into [0, n))
+      let im2 = (i - 2 + n) % n
       let im1 = (i - 1 + n) % n
       let ip1 = (i + 1) % n
 
-      // Classic Lorenz96 equation
-      dxdt[i] = (state[ip1] - state[im2]) * state[im1] - state[i] + forcing
+      // Apply Lorenz-96 formula term-by-term for clarity
+      let coupling = (state[ip1] - state[im2]) * state[im1]  // nonlinear neighbor interaction
+      let damping  = -state[i]                               // linear damping
+      let drive    = forcing                                 // constant forcing F
+
+      dxdt[i] = coupling + damping + drive
     }
 
+    // Return dx/dt; integrators will scale by dt and add to the current state
     return dxdt
   }
 
@@ -196,7 +242,7 @@ extension Lorenz96Model {
 // MARK: - Statistics and Analysis
 
 extension Lorenz96Model {
-  /// Compute climatological mean from trajectory
+  /// Compute climatological mean from trajectories
   public static func climatologicalMean(trajectory: [[Double]]) -> [Double] {
     guard !trajectory.isEmpty else { return [] }
 
@@ -241,3 +287,4 @@ extension Lorenz96Model {
     return cov
   }
 }
+

@@ -72,5 +72,7 @@ struct EnKFBenchMain {
       print(String(format: "N=%3d | %.4f s total | %.6f s/step | %.8f s/step/member | sqrt=%@ | loc=%@",
                    N, elapsed, secPerStep, secPerMember, String(sqrtMode), String(localize)))
     }
+  
+    Lorenz96Demo.runAll()
   }
 }
